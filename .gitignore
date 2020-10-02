@@ -402,3 +402,7 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+
+# Flask session files
+session.json
+cookies.txt
