@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>insta485</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="topnav">
+        <a href="{{url_for('show_index')}}">Insta485</a>
+        <div class="topnav-right">
+            <a href="{{url_for('show_explore')}}">explore</a>
+            <a href="{{url_for('user', user_url_slug=logname)}}">{{logname}}</a>
+        </div>
+    </div>
+    <h1>{{user_url_slug}}</h1>
+    {%if edit%}
+    <a href= "{{url_for('show_edit')}}" >Edit profile</a>
+    <form action="{{url_for('logout')}}" method="post" enctype="multipart/form-data">
+        <input type="submit" name="logout" value="Logout"/>
+    </form>
+    {%endif%}
+
+    {%if following == 1%}
+      <p>following</p>
+      <form action="{{url_for('user', user_url_slug=user_url_slug)}}" method="post" enctype="multipart/form-data">
+        <input type="submit" name="unfollow" value="unfollow"/>
+        <input type="hidden" name="username" value="{{user_url_slug}}"/>
+      </form>
+    {%elif following == 0%}
+      <p>not following</p>
+      <form action="{{url_for('user', user_url_slug=user_url_slug)}}" method="post" enctype="multipart/form-data">
+        <input type="submit" name="follow" value="follow"/>
+        <input type="hidden" name="username" value="{{user_url_slug}}"/>
+      </form>
+    {%else%}
+      <br>
+    {%endif%}
+
+    {% if total_posts == 0 %}
+      0 posts
+    {% elif total_posts == 1 %}
+      1 post
+    {% else %}
+      {{total_posts}} posts
+    {% endif %}
+
+    {% if total_followers == 0 %}
+    <a href="{{url_for('followers', user_url_slug=user_url_slug)}}">0 followers</a>
+    {% elif total_followers == 1 %}
+    <a href="{{url_for('followers', user_url_slug=user_url_slug)}}">1 follower</a>
+    {% else %}
+    <a href="{{url_for('followers', user_url_slug=user_url_slug)}}">{{total_followers}} followers</a>
+    {% endif %}
+
+    <a href="{{url_for('show_following', user_url_slug=user_url_slug)}}">{{total_following}} following</a>
+
+    {{fullname}}
+    <br>
+    {% for post in posts %}
+      <a href="{{url_for('show_post', postid=post['postid'])}}">
+        <img src="{{url_for('download_file', filename=post['filename'])}}"  style="width:100px;height:100px;border:0;" alt="file">
+      </a>
+    {% endfor %}
+
+    {%if edit%}
+    <form action="{{url_for('user', user_url_slug=logname)}}" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" name="create_post" value="upload new post"/>
+    </form>
+    {%endif%}
+
+  </body>
+</html>

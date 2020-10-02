@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>insta485</title>
+      <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="topnav">
+        <a href="/">Insta485</a>
+        <div class="topnav-right">
+            <a href="{{url_for('show_explore')}}">explore</a>
+            <a href="{{url_for('user', user_url_slug=logname)}}">{{logname}}</a>
+        </div>
+    </div>
+    <div class = "followers-div">
+      <h1>Followers</h1>
+    </div>
+    {% for follower in all_followers%}
+    <div class="follower-user-div">
+      <img class="follower-user-img" src="{{url_for('download_file', filename=follower[0])}}" alt="profile picture">
+      <div class="follower-user-name">
+        <a href = "{{url_for('user', user_url_slug=follower[1])}}">{{follower[1]}}</a>
+      </div>
+      <div class="following-indicator">
+        {%if follower[2]%}
+        following
+        <form action="{{url_for('followers', user_url_slug=user_url_slug)}}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="unfollow" value="unfollow"/>
+            <input type="hidden" name="username" value="{{follower[1]}}"/>
+        </form>
+        {%elif follower[1] == login_user%}
+        {%else%}
+        not following
+        <form action="{{url_for('followers', user_url_slug=user_url_slug)}}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow"/>
+            <input type="hidden" name="username" value="{{follower[1]}}"/>
+        </form>
+        {%endif%}
+      </div>
+    </div>
+    {%endfor%}
+  </body>
+</html>

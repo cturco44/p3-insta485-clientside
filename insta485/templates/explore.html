@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>insta485</title>
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="topnav">
+            <a href="/">Insta485</a>
+            <div class="topnav-right">
+                <a href="{{url_for('show_explore')}}">explore</a>
+                <a href="{{url_for('user', user_url_slug=logname)}}">{{logname}}</a>
+            </div>
+        </div>
+
+        <div class="followers-div">
+            <h1 class="followers-heading">Discover People</h1>
+            {% for user in not_following %}
+            {% if user['username'] != logname %}
+            <div class="follower-user-div">
+                {% set follower_link = url_for('user', user_url_slug=user['username']) %}
+                {% set alt = user['username'] + " profile pic" %}
+                <a href="{{follower_link}}"><img class="follower-user-img" src="{{url_for('download_file', filename=user['filename'])}}" alt="{{alt}}"></a>
+                <a class="follower-user-name" href="{{follower_link}}">{{user['username']}}</a>
+                <form action="{{url_for('show_explore')}}" method="post" enctype="multipart/form-data">
+                    <input type="submit" name="follow" value="follow"/>
+                    <input type="hidden" name="username" value="{{user['username']}}"/>
+                </form>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </body>
+
+</html>
