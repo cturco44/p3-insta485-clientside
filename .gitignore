@@ -406,3 +406,12 @@ OpenCover/
 # Flask session files
 session.json
 cookies.txt
+
+# Other related project files
+env/
+insta485.egg-info
+node_modules
+__pycache__
+bundle.js
+tmp
+var
