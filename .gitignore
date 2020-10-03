@@ -414,4 +414,4 @@ node_modules
 __pycache__
 bundle.js
 tmp
-var
+var/
