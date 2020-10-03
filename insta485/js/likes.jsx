@@ -9,7 +9,7 @@ class Likes extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { numLikes: 0, lognameLikesThis: false };
+    this.state = { numLikes: 0 };
   }
 
   componentDidMount() {
@@ -25,7 +25,6 @@ class Likes extends React.Component {
       .then((data) => {
         this.setState({
           numLikes: data.likes_count,
-          lognameLikesThis: data.logname_likes_this,
         });
       })
       .catch((error) => console.log(error));
@@ -34,7 +33,6 @@ class Likes extends React.Component {
   render() {
     // This line automatically assigns this.state.numLikes to the const variable numLikes
     const { numLikes } = this.state;
-    const { lognameLikesThis } = this.state; // use this to make the like/unlike button?
 
     // Render number of likes
     return (
