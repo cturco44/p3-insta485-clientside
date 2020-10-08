@@ -28,8 +28,8 @@ class Post extends React.Component {
 
 
   render(){
-    const {url} = this.props;
-    const {post_obj} = this.state;
+    const { url } = this.props;
+    const { post_obj } = this.state;
 
     let profile_alt = post_obj.owner + " profile pic";
     let post_alt = "post image";
