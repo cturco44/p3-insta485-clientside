@@ -44,7 +44,7 @@ class Post extends React.Component {
         <div className="post-page-user">
           <a href={post_obj.owner_show_url}><img className="profile-pic" src={post_obj.owner_img_url} alt={profile_alt}></img></a>
           <a href={post_obj.owner_show_url}>{post_obj.owner}</a>
-          <a href={post_obj.post_show_url} className="post-page-timestamp">{moment(post_obj.age).fromNow()}</a> {/* TODO: future timestamp? */}
+          <a href={post_obj.post_show_url} className="post-page-timestamp">{moment.utc(post_obj.age).fromNow()}</a> {/* TODO: future timestamp? */}
         </div>
         <div className="post-page-comments">
           <Likes url={likes_url}/>
