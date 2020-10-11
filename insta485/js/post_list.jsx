@@ -25,23 +25,23 @@ class PostList extends React.Component{
       })
       .catch((error) => console.log(error));
   }
-
-
-  // TODO: fix this
+  
   fetchData(){
-    const { next_page } = this.state;
-    let newPage = <PostList url={next_page} />
-
-    this.setState(prevState => ({
-      posts: prevState.posts.concat(newPage.state.posts),
-      next_page: newPage.state.next_page
-      // TODO: has_more
-    }));
-  }
+    const { next_page } = this.state; // how to access 'this'?
+    fetch(next_page, { credentials: 'same-origin' })
+      .then((data) => {
+        this.setState(prevState => ({
+          posts: prevState.posts.concat(data.results),
+          next_page: data.next,
+          has_more: (data.next !== "") ? true : false
+        }));
+      })
+  };
+  
 
 
   render(){
-    const { posts, has_more } = this.state;
+    const { posts, has_more, next_page } = this.state;
 
     const postItems = posts.map((post) =>
       <li style={{listStyle: "none"}} key={post.postid}><Post url={post.url} /></li>
