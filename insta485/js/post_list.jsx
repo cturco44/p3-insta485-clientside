@@ -7,6 +7,7 @@ class PostList extends React.Component{
   constructor(props){
     super(props);
     this.state = { posts: [], next_page: "", has_more: true };
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount(){
@@ -27,8 +28,12 @@ class PostList extends React.Component{
   }
   
   fetchData(){
-    const { next_page } = this.state; // how to access 'this'?
+    const next_page = this.state.next_page; 
     fetch(next_page, { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
       .then((data) => {
         this.setState(prevState => ({
           posts: prevState.posts.concat(data.results),
@@ -38,7 +43,6 @@ class PostList extends React.Component{
       })
   };
   
-
 
   render(){
     const { posts, has_more, next_page } = this.state;
