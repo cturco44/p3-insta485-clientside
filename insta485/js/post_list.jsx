@@ -57,7 +57,7 @@ class PostList extends React.Component{
         next={this.fetchData}
         hasMore={has_more}
         loader={<h2>Loading...</h2>}
-        endMessage={<p>No more posts.</p>}
+        endMessage={<p>You've reached the end.</p>}
       >{postItems}</InfiniteScroll>
     );
 

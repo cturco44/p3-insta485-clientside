@@ -1,12 +1,23 @@
 """REST API for newest posts."""
 import flask
 import insta485
+from insta485.api.comments import InvalidUsage, handle_invalid_usage
+
 
 @insta485.app.route('/api/v1/p/', methods=["GET"])
 def get_post_list():
   """Return list of posts of users logname is following with size and page."""
   page_size = flask.request.args.get("size", default=10, type=int)
   page_num = flask.request.args.get("page", default=0, type=int)
+
+  if "username" in flask.session:
+    logname = flask.session["username"]
+  else:
+    raise InvalidUsage("Forbidden", status_code=403)
+
+  if page_size < 0 or page_num < 0:
+    raise InvalidUsage("Bad Request", 400)
+
   connection = insta485.model.get_db()
 
   if "username" in flask.session:

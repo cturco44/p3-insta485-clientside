@@ -18,7 +18,7 @@ class InvalidUsage(Exception):
         rv['message'] = self.message
         return rv
 
-@insta485.app.route('/api/v1/p/<int::postid_url_slug>/comments/', methods=["GET", "POST"])
+@insta485.app.route('/api/v1/p/<int:postid_url_slug>/comments/', methods=["GET", "POST"])
 def get_comments(postid_url_slug):
     if "username" in flask.session:
         logname = flask.session["username"]
