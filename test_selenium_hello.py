@@ -5,7 +5,7 @@ import selenium.webdriver
 
 def test_selenium_hello():
     """Perform a Google search using Selenium and a headless Chrome browser."""
-
+    
     # Configure Selenium
     #
     # Pro-tip: remove the "headless" option and set a breakpoint.  A Chrome
