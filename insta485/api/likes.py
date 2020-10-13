@@ -17,7 +17,7 @@ def get_likes(postid_url_slug):
   else:
     raise InvalidUsage("Forbidden", status_code=403)
 
-  if not checkPostid(postid_url_slug) and request.method != "DELETE":
+  if not check_postid(postid_url_slug) and request.method != "DELETE":
     raise InvalidUsage("Not Found", status_code=404)
   
   if request.method == "POST":
@@ -38,7 +38,7 @@ def get_likes(postid_url_slug):
 
   
   if request.method == "DELETE":
-    if checkPostid(postid_url_slug):
+    if check_postid(postid_url_slug):
       unlike_post(logname, postid_url_slug)
     return '', 204
   
