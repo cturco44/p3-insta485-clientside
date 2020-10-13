@@ -40,7 +40,8 @@ class PostList extends React.Component {
           nextPage: data.next,
           hasMore: (data.next !== ''),
         }));
-      });
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -62,7 +63,7 @@ class PostList extends React.Component {
   }
 }
 
-Post.propTypes = {
+PostList.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
