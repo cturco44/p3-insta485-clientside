@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Likes from './likes';
 import moment from 'moment';
+import Likes from './likes';
 
 class Post extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = { post_obj: {} };
+    this.state = { postObj: {} };
   }
 
   componentDidMount() {
@@ -20,42 +19,39 @@ class Post extends React.Component {
       })
       .then((data) => {
         this.setState({
-          post_obj: data
+          postObj: data,
         });
       })
       .catch((error) => console.log(error));
   }
 
-
-  render(){
+  render() {
     const { url } = this.props;
-    const { post_obj } = this.state;
+    const { postObj } = this.state;
 
-    let profile_alt = post_obj.owner + " profile pic";
-    let post_alt = "post image";
-    let likes_url = url + "likes/";
-    let comments_url = url + "comments/";
+    const profileAlt = `${postObj.owner} profile pic`;
+    const postAlt = 'post image';
+    const likesUrl = `${url}likes/`;
+    const commentsUrl = `${url}comments/`;
 
-    return(
+    return (
       <div className="post-page-div">
         <div className="post-page-img-wrapper">
-          <img className="post-page-img" src={post_obj.img_url} alt={post_alt}></img>
+          <img className="post-page-img" src={postObj.img_url} alt={postAlt} />
         </div>
         <div className="post-page-user">
-          <a href={post_obj.owner_show_url}><img className="profile-pic" src={post_obj.owner_img_url} alt={profile_alt}></img></a>
-          <a href={post_obj.owner_show_url}>{post_obj.owner}</a>
-          <a href={post_obj.post_show_url} className="post-page-timestamp">{moment.utc(post_obj.age).fromNow()}</a>
+          <a href={postObj.owner_show_url}><img className="profile-pic" src={postObj.owner_img_url} alt={profileAlt} /></a>
+          <a href={postObj.owner_show_url}>{postObj.owner}</a>
+          <a href={postObj.post_show_url} className="post-page-timestamp">{moment.utc(postObj.age).fromNow()}</a>
         </div>
         <div className="post-page-comments">
-          <Likes url={likes_url}/>
+          <Likes url={likesUrl} />
           {/* TODO: add Comments element here */}
         </div>
       </div>
 
     );
-
   }
-
 }
 
 Post.propTypes = {

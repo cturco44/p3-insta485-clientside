@@ -3,7 +3,7 @@ import flask
 from flask import jsonify, url_for, request
 import insta485
 from insta485.api.comments import InvalidUsage, handle_invalid_usage
-from insta485.api.post import checkPostid
+from insta485.api.post import check_postid
 from insta485.views.index import num_likes, logname_liked
 from insta485.views.post import like_post, unlike_post
 import pdb
