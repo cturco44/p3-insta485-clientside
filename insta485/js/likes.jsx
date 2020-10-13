@@ -9,7 +9,9 @@ class Likes extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { numLikes: 0 };
+    this.state = { numLikes: 0, liked: false };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -25,15 +27,46 @@ class Likes extends React.Component {
       .then((data) => {
         this.setState({
           numLikes: data.likes_count,
+          liked: Boolean(Number(data.logname_likes_this)),
         });
       })
       .catch((error) => console.log(error));
   }
 
+  handleClick() {
+    const { liked } = this.state;
+    const { url } = this.props;
+    let requestType;
+    if (liked === true) {
+      requestType = 'DELETE';
+      this.setState((state) => ({
+        numLikes: state.numLikes - 1,
+      }));
+    } else {
+      requestType = 'POST';
+      this.setState((state) => ({
+        numLikes: state.numLikes + 1,
+      }));
+    }
+    const requestOptions = {
+      method: requestType,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    };
+    fetch(url, requestOptions)
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+      })
+      .catch((error) => console.log(error));
+    this.setState((state) => ({
+      liked: !state.liked,
+    }));
+  }
+
   render() {
     // This line automatically assigns this.state.numLikes to the const variable numLikes
     const { numLikes } = this.state;
-
+    const { liked } = this.state;
     // Render number of likes
     return (
       <div className="likes">
@@ -42,6 +75,9 @@ class Likes extends React.Component {
           {' '}
           like
           {numLikes !== 1 ? 's' : ''}
+          <button type="button" onClick={this.handleClick} className="like-unlike-button">
+            {liked ? 'Unlike' : 'Like'}
+          </button>
         </p>
       </div>
     );
