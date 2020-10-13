@@ -34,7 +34,7 @@ def get_likes(postid_url_slug):
       "postid": postid_url_slug
     }
     like_post(logname, postid_url_slug)
-    return jsonify(**context)
+    return jsonify(**context), 201
 
   
   if request.method == "DELETE":
