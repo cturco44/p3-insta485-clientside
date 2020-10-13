@@ -19,7 +19,7 @@ def get_likes(postid_url_slug):
 
   if not checkPostid(postid_url_slug) and request.method != "DELETE":
     raise InvalidUsage("Not Found", status_code=404)
-  pdb.set_trace()
+  
   if request.method == "POST":
     if logname_liked(postid_url_slug, logname):
       context = {
