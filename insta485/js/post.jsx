@@ -36,11 +36,9 @@ class Post extends React.Component {
 
     const profileAlt = `${postObj.owner} profile pic`;
     const postAlt = 'post image';
-    const likesUrl = `${url}likes/`;
-    const commentsUrl = `${url}comments/`;
 
     return (
-      <div> {/* originally className="post-page-div" */}
+      <div> {}
         <div className="post-page-user">
           <a href={postObj.owner_show_url}><img className="profile-pic" src={postObj.owner_img_url} alt={profileAlt} /></a>
           <a href={postObj.owner_show_url}>{postObj.owner}</a>

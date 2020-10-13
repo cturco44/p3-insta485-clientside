@@ -8,7 +8,6 @@ class PostParent extends React.Component{
     super(props);
     this.state = {numLikes: 0, liked: false};
     this.likePost = this.likePost.bind(this);
-   // this.test_log = this.test_log.bind(this);
     this.doubleClickLike = this.doubleClickLike.bind(this);
   }
 

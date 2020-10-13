@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Post from './post';
 import PostParent from './post_parent';
 
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [], nextPage: '', hasMore: false }; // TODO: hasMore default?
+    this.state = { posts: [], nextPage: '', hasMore: true };
     this.fetchData = this.fetchData.bind(this);
 
     if(performance){
@@ -58,7 +57,6 @@ class PostList extends React.Component {
   render() {
     const { posts, hasMore } = this.state;
 
-    //const postItems = posts.map((post) => <li style={{ listStyle: 'none' }} key={post.postid}><Post url={post.url} /></li>);
     const postItems = posts.map((post) => 
       <li style={{ listStyle: 'none' }} key={post.postid}>
         <PostParent postUrl={post.url} likesUrl={post.url + "likes/"} />
