@@ -1,6 +1,6 @@
 import flask
-from flask import jsonify, url_for
-from insta485.views.post import comment
+from flask import jsonify, url_for, request
+from insta485.views.post import comment as comment_func
 import insta485
 
 class InvalidUsage(Exception):
@@ -20,6 +20,7 @@ class InvalidUsage(Exception):
 
 @insta485.app.route('/api/v1/p/<int:postid_url_slug>/comments/', methods=["GET", "POST"])
 def get_comments(postid_url_slug):
+    
     if "username" in flask.session:
         logname = flask.session["username"]
     else:
@@ -33,7 +34,7 @@ def get_comments(postid_url_slug):
         if not request.json:
             raise InvalidUsage("No comment attached", status_code=400)
 
-        comment(logname, postid_url_slug, request.json['text'])
+        comment_func(logname, postid_url_slug, request.json['text'])
 
         connection = insta485.model.get_db()
         cur = connection.execute("""
@@ -48,7 +49,7 @@ def get_comments(postid_url_slug):
             "postid": postid_url_slug,
             "text": request.json['text']
         }
-        return jsonify(**comment)
+        return jsonify(**comment), 201
 
     context = retrieve_comment_from_db(postid_url_slug)
     context['url'] = flask.request.path
