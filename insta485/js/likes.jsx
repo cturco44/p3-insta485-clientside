@@ -9,11 +9,12 @@ class Likes extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { numLikes: 0, liked: false };
+    //this.state = { numLikes: 0, liked: false };
 
-    this.handleClick = this.handleClick.bind(this);
+    //this.handleClick = this.handleClick.bind(this);
   }
 
+  /*
   componentDidMount() {
     // This line automatically assigns this.props.url to the const variable url
     const { url } = this.props;
@@ -32,7 +33,8 @@ class Likes extends React.Component {
       })
       .catch((error) => console.log(error));
   }
-
+  */
+  /*
   handleClick() {
     const { liked } = this.state;
     const { url } = this.props;
@@ -62,11 +64,14 @@ class Likes extends React.Component {
       liked: !state.liked,
     }));
   }
+  */
+
+
 
   render() {
     // This line automatically assigns this.state.numLikes to the const variable numLikes
-    const { numLikes } = this.state;
-    const { liked } = this.state;
+    const { numLikes } = this.props;
+    //const { liked } = this.state;
     // Render number of likes
     return (
       <div className="likes">
@@ -75,10 +80,9 @@ class Likes extends React.Component {
           {' '}
           like
           {numLikes !== 1 ? 's' : ''}
-          <button type="button" onClick={this.handleClick} className="like-unlike-button">
-            {liked ? 'Unlike' : 'Like'}
-          </button>
+          
         </p>
+        
       </div>
     );
   }

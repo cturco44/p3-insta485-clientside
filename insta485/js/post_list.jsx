@@ -2,12 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Post from './post';
+import PostParent from './post_parent';
 
 class PostList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { posts: [], nextPage: '', hasMore: false }; // TODO: hasMore default?
     this.fetchData = this.fetchData.bind(this);
+
+    if(performance){
+      if(performance.getEntriesByType("navigation")[0].type == "back_forward"){
+        this.setState({posts: history.state.posts,
+                       next_page: history.state.next_page,
+                       has_more: history.state.has_more});
+      }
+    }
   }
 
   componentDidMount() {
@@ -23,6 +32,7 @@ class PostList extends React.Component {
           posts: data.results,
           nextPage: data.next,
         });
+        history.replaceState(this.state, null, '');
       })
       .catch((error) => console.log(error));
   }
@@ -40,6 +50,7 @@ class PostList extends React.Component {
           nextPage: data.next,
           hasMore: (data.next !== ''),
         }));
+        history.replaceState(this.state, null, '');
       })
       .catch((error) => console.log(error));
   }
@@ -47,7 +58,12 @@ class PostList extends React.Component {
   render() {
     const { posts, hasMore } = this.state;
 
-    const postItems = posts.map((post) => <li style={{ listStyle: 'none' }} key={post.postid}><Post url={post.url} /></li>);
+    //const postItems = posts.map((post) => <li style={{ listStyle: 'none' }} key={post.postid}><Post url={post.url} /></li>);
+    const postItems = posts.map((post) => 
+      <li style={{ listStyle: 'none' }} key={post.postid}>
+        <PostParent postUrl={post.url} likesUrl={post.url + "likes/"} />
+      </li>
+    );
 
     return (
       <InfiniteScroll
