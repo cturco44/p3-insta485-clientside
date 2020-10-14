@@ -40,9 +40,6 @@ class Comments extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: typedContent }),
       };
-      console.log(`url: ${url}\n`);
-      console.log(`${typedContent}\n`);
-      console.log(JSON.stringify({ text: typedContent }));
 
       fetch(url, requestOptions)
         .then((response) => {
