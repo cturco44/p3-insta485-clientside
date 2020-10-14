@@ -7,6 +7,7 @@ import insta485
 
 class InvalidUsage(Exception):
     """Check invalid usage"""
+
     status_code = 400
 
     def __init__(self, message, status_code=None, payload=None):
@@ -19,11 +20,13 @@ class InvalidUsage(Exception):
     def to_dict(self):
         """Error handling"""
         rv_var = dict(self.payload or ())
-        rv_var['message'] = self.message
+        rv_var["message"] = self.message
         return rv_var
 
 
-@insta485.app.route('/api/v1/p/<int:postid_url_slug>/comments/', methods=["GET", "POST"])
+@insta485.app.route(
+    "/api/v1/p/<int:postid_url_slug>/comments/", methods=["GET", "POST"]
+)
 def get_comments(postid_url_slug):
     """Comments api main"""
     if "username" in flask.session:
@@ -37,25 +40,26 @@ def get_comments(postid_url_slug):
         if not request.json:
             raise InvalidUsage("No comment attached", status_code=400)
 
-        comment_func(logname, postid_url_slug, request.json['text'])
+        comment_func(logname, postid_url_slug, request.json["text"])
 
         connection = insta485.model.get_db()
-        cur = connection.execute("""
+        cur = connection.execute(
+            """
             SELECT last_insert_rowid()
         """
-                                 )
+        )
 
         comment = {
-            "commentid": cur.fetchall()[0]['last_insert_rowid()'],
+            "commentid": cur.fetchall()[0]["last_insert_rowid()"],
             "owner": logname,
-            "owner_show_url": url_for('user', user_url_slug=logname),
+            "owner_show_url": url_for("user", user_url_slug=logname),
             "postid": postid_url_slug,
-            "text": request.json['text']
+            "text": request.json["text"],
         }
         return jsonify(**comment), 201
 
     context = retrieve_comment_from_db(postid_url_slug)
-    context['url'] = flask.request.path
+    context["url"] = flask.request.path
     return jsonify(**context)
 
 
@@ -63,31 +67,39 @@ def retrieve_comment_from_db(postid):
     """GET db"""
     connection = insta485.model.get_db()
 
-    cur = connection.execute("""
+    cur = connection.execute(
+        """
         SELECT *
         FROM comments
         WHERE postid = ?
-    """, [postid]
+    """,
+        [postid],
     )
     comments = cur.fetchall()
 
     context = {"comments": []}
     for comment in comments:
-        com = {"commentid": comment['commentid'], "owner": comment['owner'],
-             "owner_show_url": url_for('user', user_url_slug=comment['owner']),
-             "postid": comment['postid'], 'text': comment['text']}
+        com = {
+            "commentid": comment["commentid"],
+            "owner": comment["owner"],
+            "owner_show_url": url_for("user", user_url_slug=comment["owner"]),
+            "postid": comment["postid"],
+            "text": comment["text"],
+        }
 
-        context['comments'].append(com)
+        context["comments"].append(com)
     return context
 
 
 def check_post_exists(postid):
     """Return whether post exists."""
     connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = connection.execute(
+        """
         SELECT owner FROM posts
         WHERE postid = ?
-    """, [postid]
+    """,
+        [postid],
     )
     post_obj = cur.fetchall()
 

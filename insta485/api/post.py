@@ -4,7 +4,7 @@ import insta485
 from insta485.api.comments import InvalidUsage
 
 
-@insta485.app.route('/api/v1/p/<int:postid>/', methods=["GET"])
+@insta485.app.route("/api/v1/p/<int:postid>/", methods=["GET"])
 def get_post(postid):
     """Return details for one post."""
     if "username" not in flask.session:
@@ -15,17 +15,21 @@ def get_post(postid):
 
     connection = insta485.model.get_db()
 
-    cur = connection.execute("""
+    cur = connection.execute(
+        """
         SELECT * FROM posts
         WHERE postid = ?
-    """, [postid]
+    """,
+        [postid],
     )
     post_obj = cur.fetchall()
 
-    cur = connection.execute("""
+    cur = connection.execute(
+        """
         SELECT filename FROM users
         WHERE username = ?
-    """, [post_obj[0]["owner"]]
+    """,
+        [post_obj[0]["owner"]],
     )
     owner_img_url = cur.fetchall()[0]["filename"]
 
@@ -36,7 +40,7 @@ def get_post(postid):
         "owner_img_url": "/uploads/" + owner_img_url,
         "owner_show_url": "/u/" + post_obj[0]["owner"] + "/",
         "post_show_url": "/p/" + str(postid) + "/",
-        "url": flask.request.path
+        "url": flask.request.path,
     }
 
     return flask.jsonify(**context)
@@ -46,10 +50,12 @@ def check_postid(postid):
     """Check the postid exists in the database."""
     connection = insta485.model.get_db()
 
-    cur = connection.execute("""
+    cur = connection.execute(
+        """
         SELECT postid FROM posts
         WHERE postid = ?
-    """, [postid]
+    """,
+        [postid],
     )
     post = cur.fetchall()
 
