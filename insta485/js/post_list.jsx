@@ -9,11 +9,13 @@ class PostList extends React.Component {
     this.state = { posts: [], nextPage: '', hasMore: true };
     this.fetchData = this.fetchData.bind(this);
 
-    if(performance){
-      if(performance.getEntriesByType("navigation")[0].type == "back_forward"){
-        this.setState({posts: history.state.posts,
-                       next_page: history.state.next_page,
-                       has_more: history.state.has_more});
+    if (performance) {
+      if (performance.getEntriesByType('navigation')[0].type === 'back_forward') {
+        this.setState({
+          posts: history.state.posts,
+          next_page: history.state.next_page,
+          has_more: history.state.has_more,
+        });
       }
     }
   }
@@ -57,11 +59,11 @@ class PostList extends React.Component {
   render() {
     const { posts, hasMore } = this.state;
 
-    const postItems = posts.map((post) => 
+    const postItems = posts.map((post) => (
       <li style={{ listStyle: 'none' }} key={post.postid}>
-        <PostParent postUrl={post.url} likesUrl={post.url + "likes/"} />
+        <PostParent postUrl={post.url} likesUrl={`${post.url}likes/`} />
       </li>
-    );
+    ));
 
     return (
       <InfiniteScroll

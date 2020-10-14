@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Likes from './likes';
 import Post from './post';
 
-class PostParent extends React.Component{
-  constructor(props){
+class PostParent extends React.Component {
+  constructor(props) {
     super(props);
-    this.state = {numLikes: 0, liked: false};
+    this.state = { numLikes: 0, liked: false };
     this.likePost = this.likePost.bind(this);
     this.doubleClickLike = this.doubleClickLike.bind(this);
   }
@@ -29,7 +29,6 @@ class PostParent extends React.Component{
       })
       .catch((error) => console.log(error));
   }
-
 
   likePost() {
     const { liked } = this.state;
@@ -62,30 +61,28 @@ class PostParent extends React.Component{
     }));
   }
 
-  doubleClickLike(){
+  doubleClickLike() {
     const { liked } = this.state;
-    const { likesUrl } = this.props.url + "likes/";
+    // const { likesUrl } = this.props.url + "likes/";
 
-    let requestType;
+    // let requestType;
     if (liked !== true) {
-      requestType = 'POST';
+      // requestType = 'POST';
       this.setState((state) => ({
         numLikes: state.numLikes + 1,
-        liked: true
+        liked: true,
       }));
     }
-    
   }
 
-
-  render(){
+  render() {
     const { postUrl } = this.props;
     const { likesUrl } = this.props;
 
     const { numLikes } = this.state;
     const { liked } = this.state;
 
-    return(
+    return (
       <div className="post-page-div">
         <Post url={postUrl} handleClick={this.doubleClickLike} />
         <div className="post-page-comments">
@@ -102,7 +99,7 @@ class PostParent extends React.Component{
 
 PostParent.propTypes = {
   postUrl: PropTypes.string.isRequired,
-  likesUrl: PropTypes.string.isRequired
+  likesUrl: PropTypes.string.isRequired,
 };
 
 export default PostParent;
