@@ -6,18 +6,17 @@ import PostParent from './post_parent';
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [], nextPage: '', hasMore: true };
+
+    if(performance.getEntriesByType("navigation")[0].type === "back_forward"){
+      this.state = {posts: history.state.posts,
+                      nextPage: history.state.nextPage,
+                      hasMore: history.state.hasMore};
+
+    }else{
+      this.state = { posts: [], nextPage: '', hasMore: true };
+    }
     this.fetchData = this.fetchData.bind(this);
 
-    if (performance) {
-      if (performance.getEntriesByType('navigation')[0].type === 'back_forward') {
-        this.setState({
-          posts: history.state.posts,
-          next_page: history.state.next_page,
-          has_more: history.state.has_more,
-        });
-      }
-    }
   }
 
   componentDidMount() {
