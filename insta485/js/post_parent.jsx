@@ -63,16 +63,31 @@ class PostParent extends React.Component {
 
   doubleClickLike() {
     const { liked } = this.state;
-    // const { likesUrl } = this.props.url + "likes/";
+    const { likesUrl } = this.props;
 
-    // let requestType;
     if (liked !== true) {
-      // requestType = 'POST';
+      let requestType = 'POST';
       this.setState((state) => ({
         numLikes: state.numLikes + 1,
         liked: true,
       }));
+
+      const requestOptions = {
+        method: requestType,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      };
+  
+      fetch(likesUrl, requestOptions)
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+        })
+        .catch((error) => console.log(error));
+        this.setState((state) => ({
+          liked: true,
+        }));
     }
+    
   }
 
   render() {
