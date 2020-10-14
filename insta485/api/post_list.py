@@ -10,7 +10,6 @@ from insta485.api.comments import InvalidUsage
 @insta485.app.route('/api/v1/p/', methods=['GET'])
 def get_post_list():
     """Return list of posts logname's following users with size and page."""
-
     page_size = flask.request.args.get('size', default=10, type=int)
     page_num = flask.request.args.get('page', default=0, type=int)
 
@@ -53,7 +52,6 @@ def get_post_list():
 
 def get_feed_posts(logname):
     """Get list of posts for insta485 feed."""
-
     connection = insta485.model.get_db()
 
     # All users logname follow

@@ -1,4 +1,4 @@
-"""Comments API"""
+"""Comments API."""
 import flask
 from flask import jsonify, url_for, request
 from insta485.views.post import comment as comment_func
@@ -6,11 +6,12 @@ import insta485
 
 
 class InvalidUsage(Exception):
-    """Check invalid usage"""
+    """Check invalid usage."""
 
     status_code = 400
 
     def __init__(self, message, status_code=None, payload=None):
+        """init."""
         Exception.__init__(self)
         self.message = message
         if status_code is not None:
@@ -18,7 +19,7 @@ class InvalidUsage(Exception):
         self.payload = payload
 
     def to_dict(self):
-        """Error handling"""
+        """Error handling."""
         rv_var = dict(self.payload or ())
         rv_var["message"] = self.message
         return rv_var
@@ -28,7 +29,7 @@ class InvalidUsage(Exception):
     "/api/v1/p/<int:postid_url_slug>/comments/", methods=["GET", "POST"]
 )
 def get_comments(postid_url_slug):
-    """Comments api main"""
+    """Comments api main."""
     if "username" in flask.session:
         logname = flask.session["username"]
     else:
@@ -64,7 +65,7 @@ def get_comments(postid_url_slug):
 
 
 def retrieve_comment_from_db(postid):
-    """GET db"""
+    """GET db."""
     connection = insta485.model.get_db()
 
     cur = connection.execute(
@@ -109,7 +110,7 @@ def check_post_exists(postid):
 
 @insta485.app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
-    """error handling"""
+    """Error handling."""
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response

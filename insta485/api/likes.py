@@ -12,7 +12,7 @@ from insta485.views.post import like_post, unlike_post
     "/api/v1/p/<int:postid_url_slug>/likes/", methods=["GET", "POST", "DELETE"]
 )
 def get_likes(postid_url_slug):
-    """Return likes on postid"""
+    """Return likes on postid."""
     if "username" in flask.session:
         logname = flask.session["username"]
     else:
