@@ -41,8 +41,8 @@ def get_post_list():
             curr_post = posts[i]
 
             new_post = {
-              "postid": curr_post["postid"],
-              "url": "/api/v1/p/" + str(curr_post["postid"]) + "/"
+                "postid": curr_post["postid"],
+                "url": "/api/v1/p/" + str(curr_post["postid"]) + "/"
             }
 
             context["results"].append(new_post)

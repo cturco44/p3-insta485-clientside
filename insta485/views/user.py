@@ -61,7 +61,7 @@ def user(user_url_slug):
         posts=posts,
         logname=logname,
         user_url_slug=user_url_slug,
-        )
+    )
 
 
 def execute_query(query, parameters=None):
