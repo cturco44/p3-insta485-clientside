@@ -6,8 +6,8 @@ import PostParent from './post_parent';
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
     if (performance.getEntriesByType('navigation')[0].type === 'back_forward') {
       this.state = {
@@ -20,16 +20,16 @@ class PostList extends React.Component {
       this.state = {
         posts: [], nextPage: '', hasMore: true, currUrl: '',
       };
-      history.pushState(this.state, '');
+      window.history.pushState(this.state, '');
     }
     this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
-    const { url } = this.props;
     const { currUrl } = this.state;
 
     if (currUrl === '') {
+      const { url } = this.props;
       fetch(url, { credentials: 'same-origin' })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
@@ -40,7 +40,7 @@ class PostList extends React.Component {
             posts: data.results,
             nextPage: data.next,
             hasMore: (data.next !== ''),
-            currUrl: this.props.url,
+            currUrl: url,
           });
           window.history.replaceState(this.state, '');
         })

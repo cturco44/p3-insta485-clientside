@@ -43,13 +43,13 @@ class Comments extends React.Component {
       console.log(`url: ${url}\n`);
       console.log(`${typedContent}\n`);
       console.log(JSON.stringify({ text: typedContent }));
-      
+
       fetch(url, requestOptions)
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
-        .then ((data) => {
+        .then((data) => {
           this.setState((prevState) => ({
             commentList: prevState.commentList.concat(data),
             typedContent: '',

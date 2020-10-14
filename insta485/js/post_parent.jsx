@@ -84,7 +84,7 @@ class PostParent extends React.Component {
           if (!response.ok) throw Error(response.statusText);
         })
         .catch((error) => console.log(error));
-      this.setState((state) => ({
+      this.setState(() => ({
         liked: true,
       }));
     }
