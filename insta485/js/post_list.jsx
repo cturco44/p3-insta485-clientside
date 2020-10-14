@@ -6,45 +6,46 @@ import PostParent from './post_parent';
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-    if ('scrollRestoration' in history){
+    if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-    if(performance.getEntriesByType("navigation")[0].type === "back_forward"){
-      this.state = {posts: window.history.state.posts,
-                      nextPage: window.history.state.nextPage,
-                      hasMore: window.history.state.hasMore,
-                      currUrl: window.history.state.currUrl};
-    }
-    else{
-      this.state = { posts: [], nextPage: '', hasMore: true, currUrl: "" };
+    if (performance.getEntriesByType('navigation')[0].type === 'back_forward') {
+      this.state = {
+        posts: window.history.state.posts,
+        nextPage: window.history.state.nextPage,
+        hasMore: window.history.state.hasMore,
+        currUrl: window.history.state.currUrl,
+      };
+    } else {
+      this.state = {
+        posts: [], nextPage: '', hasMore: true, currUrl: '',
+      };
       history.pushState(this.state, '');
     }
     this.fetchData = this.fetchData.bind(this);
-
   }
 
   componentDidMount() {
     const { url } = this.props;
     const { currUrl } = this.state;
 
-    if (currUrl === ""){
+    if (currUrl === '') {
       fetch(url, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({
-          posts: data.results,
-          nextPage: data.next,
-          hasMore: (data.next !== ''),
-          currUrl: this.props.url
-        });
-        window.history.replaceState(this.state, '');
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .then((data) => {
+          this.setState({
+            posts: data.results,
+            nextPage: data.next,
+            hasMore: (data.next !== ''),
+            currUrl: this.props.url,
+          });
+          window.history.replaceState(this.state, '');
+        })
+        .catch((error) => console.log(error));
     }
-
   }
 
   fetchData() {
@@ -59,7 +60,7 @@ class PostList extends React.Component {
           posts: prevState.posts.concat(data.results),
           nextPage: data.next,
           hasMore: (data.next !== ''),
-          currUrl: nextPage
+          currUrl: nextPage,
         }));
         window.history.replaceState(this.state, '');
       })
@@ -70,9 +71,11 @@ class PostList extends React.Component {
     const { posts, hasMore } = this.state;
 
     const postItems = posts.map((post) => (
-      <li style={{ listStyle: 'none' }} key={post.postid}>
-        <PostParent postUrl={post.url} likesUrl={`${post.url}likes/`} />
-      </li>
+      <ul key={post.postid}>
+        <li style={{ listStyle: 'none' }} key={post.postid}>
+          <PostParent postUrl={post.url} likesUrl={`${post.url}likes/`} />
+        </li>
+      </ul>
     ));
 
     return (

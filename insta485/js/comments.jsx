@@ -68,8 +68,13 @@ class Comments extends React.Component {
 
     const commentItems = commentList.map((comment) => (
       <p key={comment.commentid}>
-          <a key={comment.commentid} href={comment.owner_show_url}><strong>{comment.owner}</strong></a>
-          {comment.text}
+        <a
+          key={comment.commentid}
+          href={comment.owner_show_url}
+        >
+          <strong>{comment.owner}</strong>
+        </a>
+        {comment.text}
       </p>
     ));
 
@@ -80,10 +85,10 @@ class Comments extends React.Component {
       </form>
     );
 
-    return(
+    return (
       <div>
-      {commentItems}
-      {commentForm}
+        {commentItems}
+        {commentForm}
       </div>
     );
   }

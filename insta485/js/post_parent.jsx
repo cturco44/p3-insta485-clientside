@@ -4,7 +4,6 @@ import Likes from './likes';
 import Post from './post';
 import Comments from './comments';
 
-
 class PostParent extends React.Component {
   constructor(props) {
     super(props);
@@ -68,7 +67,7 @@ class PostParent extends React.Component {
     const { likesUrl } = this.props;
 
     if (liked !== true) {
-      let requestType = 'POST';
+      const requestType = 'POST';
       this.setState((state) => ({
         numLikes: state.numLikes + 1,
         liked: true,
@@ -79,17 +78,16 @@ class PostParent extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
       };
-  
+
       fetch(likesUrl, requestOptions)
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
         })
         .catch((error) => console.log(error));
-        this.setState((state) => ({
-          liked: true,
-        }));
+      this.setState((state) => ({
+        liked: true,
+      }));
     }
-    
   }
 
   render() {
@@ -104,10 +102,10 @@ class PostParent extends React.Component {
         <Post url={postUrl} handleClick={this.doubleClickLike} />
         <div className="post-page-comments">
           <Likes url={likesUrl} numLikes={numLikes} />
-          <button type="button" onClick={this.likePost} className="like-unlike-button">
+          <button type="button" className="like-unlike-button" onClick={this.likePost}>
             {liked ? 'Unlike' : 'Like'}
           </button>
-          <Comments url={postUrl + 'comments/'} />
+          <Comments url={`${postUrl}comments/`} />
         </div>
       </div>
     );
