@@ -6,7 +6,9 @@ import PostParent from './post_parent';
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-
+    if ('scrollRestoration' in history){
+      history.scrollRestoration = 'manual';
+    }
     if(performance.getEntriesByType("navigation")[0].type === "back_forward"){
       this.state = {posts: window.history.state.posts,
                       nextPage: window.history.state.nextPage,
@@ -42,7 +44,7 @@ class PostList extends React.Component {
       })
       .catch((error) => console.log(error));
     }
-    
+
   }
 
   fetchData() {
