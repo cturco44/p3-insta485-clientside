@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Likes from './likes';
 import Post from './post';
+import Comments from './comments';
+
 
 class PostParent extends React.Component {
   constructor(props) {
@@ -105,7 +107,7 @@ class PostParent extends React.Component {
           <button type="button" onClick={this.likePost} className="like-unlike-button">
             {liked ? 'Unlike' : 'Like'}
           </button>
-          {/* Comments element goes here */}
+          <Comments url={postUrl + 'comments/'} />
         </div>
       </div>
     );

@@ -10,11 +10,12 @@ class PostList extends React.Component {
     if(performance.getEntriesByType("navigation")[0].type === "back_forward"){
       this.state = {posts: window.history.state.posts,
                       nextPage: window.history.state.nextPage,
-                      hasMore: window.history.state.hasMore};
+                      hasMore: window.history.state.hasMore,
+                      currUrl: window.history.state.currUrl};
     }
     else{
-      this.state = { posts: [], nextPage: '', hasMore: true };
-      history.pushState(this.state, ''); // idk about this line
+      this.state = { posts: [], nextPage: '', hasMore: true, currUrl: "" };
+      history.pushState(this.state, '');
     }
     this.fetchData = this.fetchData.bind(this);
 
@@ -22,8 +23,10 @@ class PostList extends React.Component {
 
   componentDidMount() {
     const { url } = this.props;
+    const { currUrl } = this.state;
 
-    fetch(url, { credentials: 'same-origin' })
+    if (currUrl === ""){
+      fetch(url, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -38,6 +41,8 @@ class PostList extends React.Component {
         window.history.replaceState(this.state, '');
       })
       .catch((error) => console.log(error));
+    }
+    
   }
 
   fetchData() {
