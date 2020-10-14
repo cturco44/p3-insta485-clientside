@@ -65,23 +65,27 @@ class Comments extends React.Component {
   render() {
     const { commentList } = this.state;
     const { typedContent } = this.state;
-    const parent = [];
-    commentList.forEach((comment) => {
-      parent.push(
-        <p>
+
+    const commentItems = commentList.map((comment) => (
+      <p key={comment.commentid}>
           <a key={comment.commentid} href={comment.owner_show_url}><strong>{comment.owner}</strong></a>
           {comment.text}
-        </p>,
-      );
-    });
-    parent.push(
+      </p>
+    ));
+
+    const commentForm = (
       <form className="comment-form" onSubmit={(e) => e.preventDefault()}>
         <input type="text" value={typedContent} onChange={this.handleChange} onKeyPress={this.handlePress} />
         <input type="submit" value="Submit" style={{ display: 'none' }} />
-      </form>,
+      </form>
     );
 
-    return (parent);
+    return(
+      <div>
+      {commentItems}
+      {commentForm}
+      </div>
+    );
   }
 }
 
