@@ -69,7 +69,7 @@ class Comments extends React.Component {
     commentList.forEach((comment) => {
       parent.push(
         <p>
-          <a href={comment.owner_show_url}><strong>{comment.owner}</strong></a>
+          <a key={comment.commentid} href={comment.owner_show_url}><strong>{comment.owner}</strong></a>
           {comment.text}
         </p>,
       );
