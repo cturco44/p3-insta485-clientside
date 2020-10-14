@@ -8,12 +8,13 @@ class PostList extends React.Component {
     super(props);
 
     if(performance.getEntriesByType("navigation")[0].type === "back_forward"){
-      this.state = {posts: history.state.posts,
-                      nextPage: history.state.nextPage,
-                      hasMore: history.state.hasMore};
-
-    }else{
+      this.state = {posts: window.history.state.posts,
+                      nextPage: window.history.state.nextPage,
+                      hasMore: window.history.state.hasMore};
+    }
+    else{
       this.state = { posts: [], nextPage: '', hasMore: true };
+      history.pushState(this.state, ''); // idk about this line
     }
     this.fetchData = this.fetchData.bind(this);
 
@@ -31,8 +32,10 @@ class PostList extends React.Component {
         this.setState({
           posts: data.results,
           nextPage: data.next,
+          hasMore: (data.next !== ''),
+          currUrl: this.props.url
         });
-        history.replaceState(this.state, null, '');
+        window.history.replaceState(this.state, '');
       })
       .catch((error) => console.log(error));
   }
@@ -49,8 +52,9 @@ class PostList extends React.Component {
           posts: prevState.posts.concat(data.results),
           nextPage: data.next,
           hasMore: (data.next !== ''),
+          currUrl: nextPage
         }));
-        history.replaceState(this.state, null, '');
+        window.history.replaceState(this.state, '');
       })
       .catch((error) => console.log(error));
   }
@@ -70,6 +74,7 @@ class PostList extends React.Component {
         next={this.fetchData}
         hasMore={hasMore}
         loader={<h2>Loading...</h2>}
+        scrollThreshold={0.9}
         endMessage={<p>You&#39;ve reached the end.</p>}
       >
         {postItems}
