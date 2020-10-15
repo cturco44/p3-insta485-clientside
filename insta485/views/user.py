@@ -66,11 +66,11 @@ def user(user_url_slug):
 
 def execute_query(query, parameters=None):
     """Execute query."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
     if not parameters:
-        cur = connection.execute(query)
+        cur.execute(query)
     else:
-        cur = connection.execute(query, parameters)
+        cur.execute(query, parameters)
     return cur
 
 
@@ -81,14 +81,14 @@ def add_post(filename, owner):
     SELECT COUNT(*) FROM posts
     """
     )
-    count = int(cur.fetchall()[0]['COUNT(*)'])
+    count = int(cur.fetchall()[0]['count'])
     postid = count + 1
     post_filename = filename
     post_owner = owner
     execute_query(
         """
     INSERT INTO posts(postid, filename, owner)
-    VALUES(?, ?, ?);
+    VALUES(%s, %s, %s);
     """, (postid, post_filename, post_owner)
     )
 
@@ -98,10 +98,10 @@ def post_count(owner):
     cur = execute_query(
         """
     SELECT COUNT(*) FROM posts
-    WHERE owner = ?
+    WHERE owner = %s
     """, (owner,)
     )
-    count = int(cur.fetchall()[0]['COUNT(*)'])
+    count = int(cur.fetchall()[0]['count'])
     return count
 
 
@@ -110,11 +110,11 @@ def follower_count(owner):
     cur = execute_query(
         """
     SELECT COUNT(*)FROM following
-    WHERE username2 = ?
+    WHERE username2 = %s
     """, (owner,)
     )
 
-    followers = cur.fetchall()[0]['COUNT(*)']
+    followers = cur.fetchall()[0]['count']
     return followers
 
 
@@ -123,10 +123,10 @@ def following_count(owner):
     cur = execute_query(
         """
     SELECT COUNT(*) FROM following
-    WHERE username1 = ?
+    WHERE username1 = %s
     """, (owner,)
     )
-    following = cur.fetchall()[0]['COUNT(*)']
+    following = cur.fetchall()[0]['count']
     return following
 
 
@@ -135,7 +135,7 @@ def get_fullname(owner):
     cur = execute_query(
         """
     SELECT fullname FROM users
-    WHERE username = ?
+    WHERE username = %s
     """, (owner,)
     )
     fullname = cur.fetchall()[0]['fullname']
@@ -147,7 +147,7 @@ def get_posts(owner):
     cur = execute_query(
         """
     SELECT postid, filename FROM posts
-    WHERE owner = ?
+    WHERE owner = %s
     ORDER BY postid DESC
     """, (owner,)
     )

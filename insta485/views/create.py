@@ -41,25 +41,25 @@ def create_account():
 
 def user_exists(username):
     """Check user exist."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT COUNT(*) FROM users
-        WHERE username = ?
+        WHERE username = %s
     """,
         [username],
     )
     num_as_string = cur.fetchall()
-    return int(num_as_string[0]["COUNT(*)"]) == 1
+    return int(num_as_string[0]["count"]) == 1
 
 
 def add_user(filename, fullname, username, email, hashed_password):
     """Check add user."""
-    connection = insta485.model.get_db()
-    connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         INSERT INTO users(username, fullname, email, filename, password)
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s)
     """,
         [username, fullname, email, filename, hashed_password],
     )

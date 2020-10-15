@@ -9,3 +9,4 @@ pylint
 pytest
 requests
 selenium
+psycopg2-binary

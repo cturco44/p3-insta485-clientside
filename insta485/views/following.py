@@ -15,7 +15,7 @@ def show_following(user_url_slug):
         abort(404)
 
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     # IF Post
     if request.method == "POST":
@@ -24,10 +24,10 @@ def show_following(user_url_slug):
         elif "follow" in request.form:
             follow(user, request.form["username"])
     # GET
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT username2 FROM following
-        WHERE username1 = ?
+        WHERE username1 = %s
     """,
         [user_url_slug],
     )
@@ -48,27 +48,27 @@ def show_following(user_url_slug):
 
 def check_user_url_slug_exists(user_url_slug):
     """Check exist."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT COUNT(*) FROM users
-        WHERE username = ?
+        WHERE username = %s
     """,
         [user_url_slug],
     )
     num_as_string = cur.fetchall()
     # pdb.set_trace()
-    return int(num_as_string[0]["COUNT(*)"]) == 1
+    return int(num_as_string[0]["count"]) == 1
 
 
 def unfollow(logged_in, following):
     """Unfollow."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
-    connection.execute(
+    cur.execute(
         """
         DELETE FROM following
-        WHERE username1 = ? AND username2 = ?
+        WHERE username1 = %s AND username2 = %s
         """,
         [logged_in, following],
     )
@@ -76,11 +76,11 @@ def unfollow(logged_in, following):
 
 def follow(logged_in, follows):
     """Check follow."""
-    connection = insta485.model.get_db()
-    connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         INSERT INTO following (username1, username2)
-        VALUES (?, ?)
+        VALUES (%s, %s)
         """,
         [logged_in, follows],
     )
@@ -88,25 +88,25 @@ def follow(logged_in, follows):
 
 def check_login_following(logname, user):
     """Check logged in following."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT COUNT(*) FROM following
-        WHERE username1 = ? AND username2 = ?
+        WHERE username1 = %s AND username2 = %s
     """,
         [logname, user],
     )
     num_as_string = cur.fetchall()
-    return int(num_as_string[0]["COUNT(*)"]) == 1
+    return int(num_as_string[0]["count"]) == 1
 
 
 def get_profile_image(user):
     """Get profile image filename."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT filename FROM users
-        WHERE username = ?
+        WHERE username = %s
     """,
         [user],
     )

@@ -13,21 +13,21 @@ def get_post(postid):
     if not check_postid(postid):
         raise InvalidUsage("Not Found", status_code=404)
 
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT * FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """,
         [postid],
     )
     post_obj = cur.fetchall()
 
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT filename FROM users
-        WHERE username = ?
+        WHERE username = %s
     """,
         [post_obj[0]["owner"]],
     )
@@ -48,12 +48,12 @@ def get_post(postid):
 
 def check_postid(postid):
     """Check the postid exists in the database."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT postid FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """,
         [postid],
     )

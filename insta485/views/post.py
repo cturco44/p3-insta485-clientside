@@ -22,7 +22,7 @@ def show_post(postid):
     check_post_exists(postid)
 
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     if request.method == "POST":
         if 'uncomment' in request.form:
@@ -52,43 +52,43 @@ def show_post(postid):
             abort(403)
 
     # Query database
-    cur = connection.execute("""
+    cur.execute("""
         SELECT *
         FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     post = cur.fetchall()
 
-    cur = connection.execute("""
+    cur.execute("""
         SELECT *
         FROM likes
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     likes = cur.fetchall()
 
-    cur = connection.execute("""
+    cur.execute("""
         SELECT *
         FROM comments
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     comments = cur.fetchall()
 
-    cur = connection.execute("""
+    cur.execute("""
         SELECT filename, username FROM users
         WHERE EXISTS (SELECT * FROM posts
                         WHERE users.username = posts.owner
-                        AND posts.postid = ?)
+                        AND posts.postid = %s)
     """, [postid]
     )
     owner = cur.fetchall()
 
-    cur = connection.execute("""
+    cur.execute("""
         SELECT owner FROM likes
-        WHERE postid = ?
-        AND owner = ?
+        WHERE postid = %s
+        AND owner = %s
     """, [postid, logname]
     )
     owner_like = cur.fetchall()
@@ -116,50 +116,50 @@ def download_file(filename):
 
 def uncomment(commentid):
     """Delete comment."""
-    connection = insta485.model.get_db()
-    connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         DELETE FROM comments
-        WHERE commentid = ?
+        WHERE commentid = %s
     """, [commentid]
     )
 
 
 def like_post(logname, postid):
     """Like a post."""
-    connection = insta485.model.get_db()
-    connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         INSERT OR IGNORE INTO likes(owner, postid)
-        VALUES(?, ?)
+        VALUES(%s, %s)
     """, [logname, postid]
     )
 
 
 def unlike_post(logname, postid):
     """Unlike a post."""
-    connection = insta485.model.get_db()
-    connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         DELETE FROM likes
-        WHERE postid = ? AND owner = ?
+        WHERE postid = %s AND owner = %s
     """, [postid, logname]
     )
 
 
 def comment(logname, postid, comment_text):
     """Make a comment on a post."""
-    connection = insta485.model.get_db()
-    connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         INSERT OR IGNORE INTO comments(owner, postid, text)
-        VALUES(?, ?, ?)
+        VALUES(%s, %s, %s)
     """, [logname, postid, comment_text]
     )
 
 
 def delete_from_database(postid):
     """Delete post from database only."""
-    connection = insta485.model.get_db()
-    connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         DELETE FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
 
@@ -167,10 +167,10 @@ def delete_from_database(postid):
 def delete_post(postid):
     """Delete a post's source image and from the database."""
     # find filename
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT filename from posts
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     deleted_filename = cur.fetchall()[0]['filename']
@@ -189,10 +189,10 @@ def check_user_post(postid):
         return False
 
     logname = flask.session["username"]
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT owner FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     post_owner = cur.fetchall()[0]['owner']
@@ -206,10 +206,10 @@ def check_user_comment(commentid):
         return False
 
     logname = flask.session["username"]
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT owner FROM comments
-        WHERE commentid = ?
+        WHERE commentid = %s
     """, [commentid]
     )
     comment_owner = cur.fetchall()[0]['owner']
@@ -219,10 +219,10 @@ def check_user_comment(commentid):
 
 def check_comment_exists(commentid):
     """Return whether comment exists."""
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT owner FROM comments
-        WHERE commentid = ?
+        WHERE commentid = %s
     """, [commentid]
     )
     comment_obj = cur.fetchall()
@@ -233,10 +233,10 @@ def check_comment_exists(commentid):
 
 def check_post_exists(postid):
     """Return whether post exists."""
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT owner FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """, [postid]
     )
     post_obj = cur.fetchall()
