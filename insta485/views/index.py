@@ -13,7 +13,7 @@ from insta485.views.post import like_post, unlike_post, comment
 def show_index():
     """Display / route."""
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     if "username" in flask.session:
         logname = flask.session["username"]
@@ -30,10 +30,10 @@ def show_index():
         return redirect(url_for("show_index"))
 
     # ALL USERS logname follows
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT username2 FROM following
-        WHERE username1 = ?
+        WHERE username1 = %s
     """,
         [logname]
     )
@@ -48,7 +48,8 @@ def show_index():
         else:
             query += " OR owner = " + "'" + item["username2"] + "'"
     query += "\nORDER BY postid DESC"
-    cur = connection.execute(query)
+    cur = insta485.model.get_db()
+    cur.execute(query)
     posts = cur.fetchall()
 
     for i in posts:
@@ -74,11 +75,11 @@ def show_index():
 
 def list_comments(post_id):
     """List comments."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT * FROM comments
-        WHERE postid = ?
+        WHERE postid = %s
         ORDER BY commentID ASC
     """,
         [post_id],
@@ -93,39 +94,39 @@ def list_comments(post_id):
 
 def num_likes(post_id):
     """Get num likes from db."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT COUNT(*) FROM likes
-        WHERE postid = ?
+        WHERE postid = %s
     """,
         [post_id],
     )
     num_as_string = cur.fetchall()
-    return int(num_as_string[0]["COUNT(*)"])
+    return int(num_as_string[0]["count"])
 
 
 def logname_liked(post_id, logname):
     """See if logname liked."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT COUNT(*) FROM likes
-        WHERE postid = ? AND owner = ?
+        WHERE postid = %s AND owner = %s
     """,
         [post_id, logname],
     )
     num_as_string = cur.fetchall()
-    return int(num_as_string[0]["COUNT(*)"]) == 1
+    return int(num_as_string[0]["count"]) == 1
 
 
 def owner_profile_pic(owner):
     """Filename profile pic getter."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT filename FROM users
-        WHERE username = ?
+        WHERE username = %s
     """,
         [owner],
     )

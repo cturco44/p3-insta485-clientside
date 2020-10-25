@@ -5,9 +5,8 @@ set -Eeuo pipefail
 # Prints commands
 set -x
 
-if ./bin/insta485db create ; then
-    export FLASK_ENV=development
-    export FLASK_APP=insta485
+if ! psql -lqt | grep -q insta485; then
+    ./bin/insta485db create
     flask run --host 0.0.0.0 --port 8000
 else
     ./bin/insta485db reset
@@ -15,4 +14,3 @@ else
     export FLASK_APP=insta485
     flask run --host 0.0.0.0 --port 8000
 fi
-

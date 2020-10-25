@@ -31,10 +31,10 @@ def login():
 
 def user_exists(username):
     """Check user exists."""
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT COUNT(*) FROM users
-        WHERE username = ?
+        WHERE username = %s
     """, [username]
     )
     num_as_string = cur.fetchall()
@@ -43,12 +43,12 @@ def user_exists(username):
 
 def check_credentials(username, password):
     """Check credentials."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
     hashed_password = hash_password(password)
-    cur = connection.execute(
+    cur.execute(
         """
     SELECT password FROM users
-    WHERE username = ? AND password = ?
+    WHERE username = %s AND password = %s
     """, (username, hashed_password)
     )
     check = cur.fetchall()
@@ -57,10 +57,10 @@ def check_credentials(username, password):
 
 def check_credentials_pass(username, input_pass):
     """Verify the login information."""
-    connection = insta485.model.get_db()
-    cur = connection.execute("""
+    cur = insta485.model.get_db()
+    cur.execute("""
         SELECT password FROM users
-        WHERE username = ?
+        WHERE username = %s
     """, [username]
     )
     db_password = cur.fetchall()[0]['password']

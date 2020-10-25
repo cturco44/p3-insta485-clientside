@@ -13,7 +13,7 @@ import insta485
 def show_explore():
     """For /explore/ page."""
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     if "username" in flask.session:
         logname = flask.session["username"]
@@ -26,10 +26,10 @@ def show_explore():
 
     # Query database
     # want to select rows in "users" of people that logname is not following
-    cur = connection.execute("""
+    cur.execute("""
         SELECT DISTINCT username, filename FROM users
         WHERE NOT EXISTS (SELECT * FROM following
-                            WHERE following.username1 = ?
+                            WHERE following.username1 = %s
                             AND following.username2 = users.username)
     """, [logname]
     )
@@ -42,10 +42,10 @@ def show_explore():
                     methods=["POST", "GET"])
 def follow_user(logname, username):
     """For following a user."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
-    connection.execute("""
+    cur.execute("""
         INSERT OR IGNORE INTO following(username1, username2)
-        VALUES(?, ?)
+        VALUES(%s, %s)
     """, [logname, username]
     )

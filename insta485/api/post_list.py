@@ -52,14 +52,13 @@ def get_post_list():
 
 def get_feed_posts(logname):
     """Get list of posts for insta485 feed."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     # All users logname follow
 
-    cur = \
-        connection.execute("""
+    cur.execute("""
         SELECT username2 from following
-        WHERE username1 = ?
+        WHERE username1 = %s
     """,
                            [logname])
 
@@ -75,7 +74,7 @@ def get_feed_posts(logname):
         else:
             query += ' OR owner = ' + "'" + item['username2'] + "'"
     query += '\nORDER BY postid DESC'
-    cur = connection.execute(query)
+    cur.execute(query)
     posts = cur.fetchall()
 
     return posts

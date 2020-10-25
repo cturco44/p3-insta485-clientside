@@ -15,14 +15,14 @@ import insta485
 def show_password():
     """For /accounts/password/ page."""
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     if "username" in flask.session:
         logname = flask.session["username"]
 
-        cur = connection.execute("""
+        cur.execute("""
             SELECT password FROM users
-            WHERE username = ?
+            WHERE username = %s
         """, [logname]
         )
         user_obj = cur.fetchall()
@@ -45,10 +45,11 @@ def show_password():
             new_password = hash_password(request.form['new_password1'])
 
             # update hashed password entry in database
-            connection.execute("""
+            cur = insta485.model.get_db()
+            cur.execute("""
                 UPDATE users
-                SET password = ?
-                WHERE username = ?
+                SET password = %s
+                WHERE username = %s
             """, [new_password, logname]
             )
 

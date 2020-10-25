@@ -43,8 +43,8 @@ def get_comments(postid_url_slug):
 
         comment_func(logname, postid_url_slug, request.json["text"])
 
-        connection = insta485.model.get_db()
-        cur = connection.execute(
+        cur = insta485.model.get_db()
+        cur.execute(
             """
             SELECT last_insert_rowid()
         """
@@ -66,13 +66,13 @@ def get_comments(postid_url_slug):
 
 def retrieve_comment_from_db(postid):
     """GET db."""
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
-    cur = connection.execute(
+    cur.execute(
         """
         SELECT *
         FROM comments
-        WHERE postid = ?
+        WHERE postid = %s
     """,
         [postid],
     )
@@ -94,11 +94,11 @@ def retrieve_comment_from_db(postid):
 
 def check_post_exists(postid):
     """Return whether post exists."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT owner FROM posts
-        WHERE postid = ?
+        WHERE postid = %s
     """,
         [postid],
     )

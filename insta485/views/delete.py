@@ -22,31 +22,31 @@ def delete_account():
 
 def delete_user(user):
     """Delete user from database."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT filename FROM posts
-        WHERE owner = ?
+        WHERE owner = %s
         """,
         [user],
     )
     filenames = cur.fetchall()
     delete_images(filenames)
-
-    cur = connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         SELECT filename FROM users
-        WHERE username = ?
+        WHERE username = %s
         """,
         [user],
     )
     profile_pic = cur.fetchall()
     delete_images(profile_pic)
-
-    connection.execute(
+    cur = insta485.model.get_db()
+    cur.execute(
         """
         DELETE FROM users
-        WHERE username = ?
+        WHERE username = %s
         """,
         [user],
     )

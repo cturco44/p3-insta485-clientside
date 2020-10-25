@@ -16,14 +16,14 @@ import insta485
 def show_edit():
     """For /accounts/edit/ page."""
     # Connect to database
-    connection = insta485.model.get_db()
+    cur = insta485.model.get_db()
 
     if "username" in flask.session:
         logname = flask.session["username"]
 
-        cur = connection.execute("""
+        cur.execute("""
             SELECT filename, fullname, email FROM users
-            WHERE username = ?
+            WHERE username = %s
         """, [logname]
         )
         user_obj = cur.fetchall()
@@ -59,23 +59,24 @@ def show_edit():
                 logname_filename = uuid_basename
                 logname_fullname = request.form['fullname']
                 logname_email = request.form['email']
-
-                connection.execute("""
+                cur = insta485.model.get_db()
+                cur.execute("""
                     UPDATE users
-                    SET filename = ?,
-                    fullname = ?,
-                    email = ?
-                    WHERE username = ?
+                    SET filename = %s,
+                    fullname = %s,
+                    email = %s
+                    WHERE username = %s
                 """, [uuid_basename, request.form['fullname'],
                       request.form['email'], logname]
                 )
 
             else:
-                connection.execute("""
+                cur = insta485.model.get_db()
+                cur.execute("""
                     UPDATE users
-                    SET fullname = ?,
-                    email = ?
-                    WHERE username = ?
+                    SET fullname = %s,
+                    email = %s
+                    WHERE username = %s
                 """, [request.form['fullname'], request.form['email'], logname]
                 )
 

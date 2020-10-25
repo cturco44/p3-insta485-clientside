@@ -43,7 +43,7 @@ def get_followers(owner):
     cur = execute_query(
         """
     SELECT username1 FROM following
-    WHERE username2 = ?
+    WHERE username2 = %s
     """, (owner,)
     )
     list_followers = cur.fetchall()
