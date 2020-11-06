@@ -23,3 +23,12 @@ POSTGRESQL_DATABASE_PORT = 5432
 POSTGRESQL_DATABASE_USER = "insta485" # OS or WSL username
 POSTGRESQL_DATABASE_PASSWORD = "password"
 POSTGRESQL_DATABASE_DB = "insta485"
+
+# AWS S3 static files
+# https://flask-s3.readthedocs.io/en/latest/
+FLASKS3_DEBUG = True # Enables Flask-S3's debug mode
+FLASKS3_ACTIVE = True # This setting allows you to toggle whether Flask-S3 is active or not
+FLASKS3_BUCKET_NAME = "eroyama.static.insta485.com" # Add your own root bucket name here, replacing uniqname with your uniqname
+FLASKS3_REGION = "us-east-2" # Sets up the AWS region to host your static assets in 
+FLASKS3_FORCE_MIMETYPE = True # Always set the Content-Type header on the S3 files irrespective of gzipping
+FLASKS3_USE_HTTPS = False # We will only be using HTTP for now

@@ -1,5 +1,6 @@
 """Insta485 package initializer."""
 import flask
+import flask_s3
 
 # app is a single object used by all the code modules in this package
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
@@ -22,3 +23,6 @@ app.config.from_envvar('INSTA485_SETTINGS', silent=True)
 import insta485.api  # noqa: E402  pylint: disable=wrong-import-position
 import insta485.views  # noqa: E402  pylint: disable=wrong-import-position
 import insta485.model  # noqa: E402  pylint: disable=wrong-import-position
+
+# Set up flask-s3, which serves static files from AWS S3 in production
+s3 = flask_s3.FlaskS3(app)
