@@ -25,6 +25,7 @@ setup(
         'selenium',
         'psycopg2-binary',
         'Flask-S3==0.3.3',
+        'boto3==1.14.9',
     ],
     python_requires='>=3.6',
 )

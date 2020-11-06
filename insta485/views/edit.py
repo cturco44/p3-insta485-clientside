@@ -39,21 +39,24 @@ def show_edit():
             if request.files['file'].filename != "":
                 # Unpack flask object
                 fileobj = flask.request.files["file"]
-                filename = fileobj.filename
+                #filename = fileobj.filename
 
                 # Compute base name (filename without directory).
-                uuid_basename = "{stem}{suffix}".format(
-                    stem=uuid.uuid4().hex,
-                    suffix=pathlib.Path(filename).suffix
-                )
+                # uuid_basename = "{stem}{suffix}".format(
+                #     stem=uuid.uuid4().hex,
+                #     suffix=pathlib.Path(filename).suffix
+                # )
 
-                # Save to disk
-                path = insta485.app.config["UPLOAD_FOLDER"]/uuid_basename
-                fileobj.save(path)
+                # # Save to disk
+                # path = insta485.app.config["UPLOAD_FOLDER"]/uuid_basename
+                # fileobj.save(path)
+                
+                uuid_basename = insta485.model.create_upload()
 
                 # Delete old photo
-                del_pth = insta485.app.config["UPLOAD_FOLDER"]/logname_filename
-                os.unlink(del_pth)
+                #del_pth = insta485.app.config["UPLOAD_FOLDER"]/logname_filename
+                #os.unlink(del_pth)
+                insta485.model.remove_upload(logname_filename)
 
                 # Update info
                 logname_filename = uuid_basename

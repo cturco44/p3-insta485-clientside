@@ -3,7 +3,7 @@ from insta485.views.following import show_following, check_user_url_slug_exists
 from insta485.views.delete import delete_account
 from insta485.views.create import create_account, upload_file
 from insta485.views.index import show_index
-from insta485.views.post import show_post, download_file
+from insta485.views.post import show_post#, download_file
 from insta485.views.post import uncomment, like_post, unlike_post
 from insta485.views.post import comment, delete_post, check_user_post
 from insta485.views.post import check_user_comment, check_comment_exists

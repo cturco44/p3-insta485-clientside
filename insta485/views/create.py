@@ -25,8 +25,9 @@ def create_account():
             abort(409)
         if "file" not in request.files:
             abort(400)
-        file = request.files["file"]
-        filename = upload_file(file)
+        #file = request.files["file"]
+        #filename = upload_file(file)
+        filename = insta485.model.create_upload()
 
         if unhashed_password == "":
             abort(400)

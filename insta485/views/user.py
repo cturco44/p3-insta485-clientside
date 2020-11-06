@@ -30,7 +30,8 @@ def user(user_url_slug):
             fileobj = request.files['file']
             if fileobj.filename == '':
                 abort(400)
-            filename = upload_file(fileobj)
+            #filename = upload_file(fileobj)
+            filename = insta485.model.create_upload()
             add_post(filename, user_url_slug)
 
         if 'unfollow' in request.form:

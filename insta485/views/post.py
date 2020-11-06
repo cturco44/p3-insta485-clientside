@@ -104,14 +104,14 @@ def show_post(postid):
                                  logname=logname)
 
 
-@insta485.app.route('/uploads/<path:filename>')
-def download_file(filename):
-    """For showing images on pages."""
-    if "username" not in flask.session:
-        abort(403)
+# @insta485.app.route('/uploads/<path:filename>')
+# def download_file(filename):
+#     """For showing images on pages."""
+#     if "username" not in flask.session:
+#         abort(403)
 
-    return send_from_directory(insta485.app.config["UPLOAD_FOLDER"],
-                               filename, as_attachment=False)
+#     return send_from_directory(insta485.app.config["UPLOAD_FOLDER"],
+#                                filename, as_attachment=False)
 
 
 def uncomment(commentid):
@@ -179,8 +179,9 @@ def delete_post(postid):
     delete_from_database(postid)
 
     # delete file
-    delete_path = insta485.app.config["UPLOAD_FOLDER"]/deleted_filename
-    os.unlink(delete_path)
+    insta485.model.remove_upload(deleted_filename)
+    #delete_path = insta485.app.config["UPLOAD_FOLDER"]/deleted_filename
+    #os.unlink(delete_path)
 
 
 def check_user_post(postid):

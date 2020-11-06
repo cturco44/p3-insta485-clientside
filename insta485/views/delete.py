@@ -55,4 +55,5 @@ def delete_user(user):
 def delete_images(list_input):
     """Delete image."""
     for item in list_input:
-        os.remove(str(UPLOAD_FOLDER / item["filename"]))
+        #os.remove(str(UPLOAD_FOLDER / item["filename"]))
+        insta485.model.remove_upload(item['filename'])
