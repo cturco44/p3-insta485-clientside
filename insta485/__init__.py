@@ -1,4 +1,7 @@
-"""Insta485 package initializer."""
+"""
+Insta485 package initializer.
+Andrew DeOrio <awdeorio@umich.edu>
+"""
 import flask
 import flask_s3
 
@@ -6,7 +9,15 @@ import flask_s3
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 
 # Read settings from config module (insta485/config.py)
-app.config.from_object('insta485.config')
+app.config.from_object('insta485.config_common')
+
+# Overlay production or development settings.  Set the environment variable
+# FLASK_ENV=development for a development environment.  The default is
+# production.
+if app.config["ENV"] == "development":
+    app.config.from_object('insta485.config_dev')
+else:
+    app.config.from_object('insta485.config_prod')
 
 # Overlay settings read from a Python file whose path is set in the environment
 # variable INSTA485_SETTINGS. Setting this environment variable is optional.
@@ -16,13 +27,12 @@ app.config.from_object('insta485.config')
 # $ export INSTA485_SETTINGS=secret_key_config.py
 app.config.from_envvar('INSTA485_SETTINGS', silent=True)
 
+s3 = flask_s3.FlaskS3(app)
+
 # Tell our app about views and model.  This is dangerously close to a
 # circular import, which is naughty, but Flask was designed that way.
-# (Reference http://flask.pocoo.org/docs/patterns/packages/)  We're
+# (Reference http://flask.pocoo.org/docs/0.12/patterns/packages/)  We're
 # going to tell pylint and pycodestyle to ignore this coding style violation.
 import insta485.api  # noqa: E402  pylint: disable=wrong-import-position
 import insta485.views  # noqa: E402  pylint: disable=wrong-import-position
 import insta485.model  # noqa: E402  pylint: disable=wrong-import-position
-
-# Set up flask-s3, which serves static files from AWS S3 in production
-s3 = flask_s3.FlaskS3(app)

@@ -3,7 +3,7 @@ import os
 import flask
 from flask import request, redirect, url_for
 import insta485
-from insta485.config import UPLOAD_FOLDER
+from insta485.config_common import UPLOAD_FOLDER
 
 
 @insta485.app.route("/accounts/delete/", methods=["POST", "GET"])
