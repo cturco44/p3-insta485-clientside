@@ -1,6 +1,6 @@
 """Insta485 package initializer."""
 import flask
-
+import flask_s3
 # app is a single object used by all the code modules in this package
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 
@@ -14,7 +14,7 @@ app.config.from_object('insta485.config')
 # EXAMPLE:
 # $ export INSTA485_SETTINGS=secret_key_config.py
 app.config.from_envvar('INSTA485_SETTINGS', silent=True)
-
+s3 = flask_s3.FlaskS3(app)
 # Tell our app about views and model.  This is dangerously close to a
 # circular import, which is naughty, but Flask was designed that way.
 # (Reference http://flask.pocoo.org/docs/patterns/packages/)  We're

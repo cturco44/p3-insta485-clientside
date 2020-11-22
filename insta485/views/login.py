@@ -38,7 +38,7 @@ def user_exists(username):
     """, [username]
     )
     num_as_string = cur.fetchall()
-    return int(num_as_string[0]['COUNT(*)']) == 1
+    return int(num_as_string[0]['count']) == 1
 
 
 def check_credentials(username, password):

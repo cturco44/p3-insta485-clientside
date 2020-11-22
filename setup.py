@@ -23,7 +23,8 @@ setup(
         'pytest',
         'requests',
         'selenium',
-        'psycopg2-binary'
+        'psycopg2-binary',
+        'Flask-S3==0.3.3'
     ],
     python_requires='>=3.6',
 )
