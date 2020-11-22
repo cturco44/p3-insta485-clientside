@@ -10,3 +10,4 @@ pytest
 requests
 selenium
 psycopg2-binary
+Flask-S3==0.3.3

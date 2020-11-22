@@ -1,0 +1,9 @@
+graft insta485
+
+# Avoid JS files in insta485
+global-exclude *.js
+global-exclude *.jsx
+
+# Avoid dev and and binary files
+global-exclude *.pyc
+global-exclude __pycache__
