@@ -1,16 +1,25 @@
 #!/bin/bash
+#
+# insta485run
+#
+# Clean, build and start server
+#
+# Andrew DeOrio <awdeorio@umich.edu>
 
-# Stop on errors
-set -Eeuo pipefail
-# Prints commands
-set -x
+# Stop on errors, print commands
+set -Eeuxo pipefail
 
+# Create database if needed
 if ! psql -lqt | grep -q insta485; then
     ./bin/insta485db create
-    flask run --host 0.0.0.0 --port 8000
-else
-    ./bin/insta485db reset
-    export FLASK_ENV=development
-    export FLASK_APP=insta485
-    flask run --host 0.0.0.0 --port 8000
 fi
+
+# Set up environment for Flask debug server
+export FLASK_ENV=development
+export FLASK_APP=insta485
+
+# Compile in the background
+npx webpack --config webpack.dev.js --watch &
+
+# Run development server
+flask run --port 8000

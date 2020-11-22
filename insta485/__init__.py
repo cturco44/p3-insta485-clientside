@@ -5,7 +5,15 @@ import flask_s3
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 
 # Read settings from config module (insta485/config.py)
-app.config.from_object('insta485.config')
+app.config.from_object('insta485.config_common')
+
+# Overlay production or development settings.  Set the environment variable
+# FLASK_ENV=development for a development environment.  The default is
+# production.
+if app.config["ENV"] == "development":
+    app.config.from_object('insta485.config_dev')
+else:
+    app.config.from_object('insta485.config_prod')
 
 # Overlay settings read from a Python file whose path is set in the environment
 # variable INSTA485_SETTINGS. Setting this environment variable is optional.
